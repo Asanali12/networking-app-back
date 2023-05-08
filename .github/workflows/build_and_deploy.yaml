@@ -1,0 +1,24 @@
+name: Docker build and deploy
+on:
+  push:
+    tags:
+      - '!refs/tags/*'
+    branches:
+      - 'master'
+
+jobs:
+  docker-build:
+    name: "Build and push docker"
+    runs-on: [ ubuntu-latest ]
+    env:
+      DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+      DOCKER_NAME: ${{ secrets.DOCKER_NAME }}
+      DOCKER_PWD: ${{ secrets.DOCKER_PWD }}
+    steps:
+      - name: Login to docker.io
+        run: echo ${{ secrets.DOCKER_PWD }} | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+      - uses: actions/checkout@master
+      - name: Build image
+        run: docker build -t $LOGIN/$NAME:${{ inputs.tag }} .
+      - name: Push image to docker.io
+        run: docker push $LOGIN/$NAME:${{ inputs.tag }}
