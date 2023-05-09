@@ -15,8 +15,10 @@ def user_to_user_data(user: User):
         'age': user.age,
         'city': user.city,
         'university': user.university,
-        'logo': base64.b64encode(user.logo.read())
     }
+    if user.logo is not None:
+        data['logo'] = base64.b64encode(user.logo.read())
+
     return data
 
 
