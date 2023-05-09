@@ -31,6 +31,7 @@ class ProfileViewSet(viewsets.ViewSet):
         city = request.data.get('city', None)
         university = request.data.get('university', None)
         if logo is not None:
+            print("LOGO UPDATED")
             user.logo = logo
         if fullname is not None:
             user.fullname = fullname
@@ -41,7 +42,7 @@ class ProfileViewSet(viewsets.ViewSet):
         if university is not None:
             user.university = university
         user.save()
-        return Response(status=200)
+        return Response(user_to_user_data(user), status=200)
 
     def info(self, request):
         user = request.user
