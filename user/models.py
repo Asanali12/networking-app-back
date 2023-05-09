@@ -41,7 +41,7 @@ class User(AbstractBaseUser):
     age = models.IntegerField(null=True, blank=True)
     city = models.CharField(max_length=256, null=True, blank=True)
     university = models.CharField(max_length=256, null=True, blank=True)
-    logo = models.ImageField(null=True, blank=True, upload_to=logo_directory_path)
+    logo_url = models.CharField(max_length=256, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

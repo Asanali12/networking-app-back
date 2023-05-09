@@ -15,11 +15,9 @@ def user_to_user_data(user: User):
         'age': user.age,
         'city': user.city,
         'university': user.university,
+        'logo_url': user.logo_url
     }
-    if user.logo is not None:
-        data['logo'] = base64.b64encode(user.logo.read())
-
-    return data
+    return {k: v for k, v in data.items() if v}
 
 
 class ProfileViewSet(viewsets.ViewSet):
@@ -33,8 +31,7 @@ class ProfileViewSet(viewsets.ViewSet):
         city = request.data.get('city', None)
         university = request.data.get('university', None)
         if logo is not None:
-            print("LOGO UPDATED")
-            user.logo = logo
+            print(logo)
         if fullname is not None:
             user.fullname = fullname
         if age is not None:
