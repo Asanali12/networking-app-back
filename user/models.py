@@ -2,6 +2,10 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 
 
+def logo_directory_path(instance, filename):
+    return f'images/user_{instance.id}/logo/{filename}'
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, fullname, password=None):
         if not email:
@@ -37,7 +41,7 @@ class User(AbstractBaseUser):
     age = models.IntegerField(default=0, null=True, blank=True)
     city = models.CharField(max_length=256, null=True, blank=True)
     university = models.CharField(max_length=256, null=True, blank=True)
-    logo_url = models.CharField(max_length=1024, null=True, blank=True)
+    logo = models.ImageField(null=True, blank=True, default=None, upload_to=logo_directory_path)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

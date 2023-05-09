@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_spectacular',
     'user',
+    'user_profile',
     'socialApp'
 ]
 
