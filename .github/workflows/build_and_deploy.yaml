@@ -16,9 +16,9 @@ jobs:
       DOCKER_PWD: ${{ secrets.DOCKER_PWD }}
     steps:
       - name: Login to docker.io
-        run: echo ${{ secrets.DOCKER_PWD }} | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+        run: echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
       - uses: actions/checkout@master
       - name: Build image
-        run: docker build -t $LOGIN/$NAME:latest .
+        run: docker build -t $DOCKER_LOGIN/$DOCKER_NAME:latest .
       - name: Push image to docker.io
-        run: docker push $LOGIN/$NAME:latest
+        run: docker push $DOCKER_LOGIN/$DOCKER_NAME:latest
