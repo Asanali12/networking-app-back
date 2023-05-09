@@ -1,0 +1,20 @@
+version: "2"
+
+services:
+  app:
+    image: ${DOCKER_LOGIN}/${DOCKER_NAME}:latest
+    environment:
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DEBUG=${DEBUG}
+    command: >
+            bash -c "python manage.py makemigrations && python manage.py migrate 
+            && python manage.py runserver 0.0.0.0:8000"
+    network_mode: "host"
+    ports:
+      - "8000:8000"
+
+    restart: on-failure

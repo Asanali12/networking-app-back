@@ -22,3 +22,45 @@ jobs:
         run: docker build -t $DOCKER_LOGIN/$DOCKER_NAME:latest .
       - name: Push image to docker.io
         run: docker push $DOCKER_LOGIN/$DOCKER_NAME:latest
+  deploy:
+    name: "Deploy to server"
+    runs-on: [ ubuntu-latest ]
+    env:
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_KEY: ${{ secrets.SSH_KEY }}
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PWD }}
+      DOCKER_NAME: ${{ secrets.DOCKER_NAME }}
+      ENVFILE: ${{ secrets.ENVFILE }}
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
+
+      - uses: actions/checkout@master
+
+      - name: Create env file
+        run: |
+          echo -e $ENVFILE >> .env
+          echo DOCKER_LOGIN=$DOCKER_LOGIN >> .env
+          echo DOCKER_PASSWORD=$DOCKER_PASSWORD >> .env
+          echo DOCKER_NAME=$DOCKER_NAME >> .env
+
+      - name: Copy files to vm
+        run: |
+          scp docker-compose.yaml staging:~/docker-compose.yaml
+          scp .env staging:~/.env
+
+      - name: Run deploy.sh
+        run: |
+          envsubst < deploy.sh | ssh staging sh
