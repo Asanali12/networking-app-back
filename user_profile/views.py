@@ -41,7 +41,6 @@ class ProfileViewSet(viewsets.ViewSet):
         if university is not None:
             user.university = university
         user.save()
-        print(user.logo.read())
         return Response(status=200)
 
     def info(self, request):
