@@ -38,10 +38,10 @@ class User(AbstractBaseUser):
     fullname = models.CharField(verbose_name='Fullname', max_length=255)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    age = models.IntegerField(default=0, null=True, blank=True)
+    age = models.IntegerField(null=True, blank=True)
     city = models.CharField(max_length=256, null=True, blank=True)
     university = models.CharField(max_length=256, null=True, blank=True)
-    logo = models.ImageField(null=True, blank=True, default=None, upload_to=logo_directory_path)
+    logo = models.ImageField(null=True, blank=True, upload_to=logo_directory_path)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

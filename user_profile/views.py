@@ -1,6 +1,24 @@
+import base64
+
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
+from user.models import User
+
+
+def user_to_user_data(user: User):
+    data = {
+        'id': user.id,
+        'fullname': user.fullname,
+        'email': user.email,
+        'age': user.age,
+        'city': user.city,
+        'university': user.university,
+        'logo': base64.b64encode(user.logo.read())
+    }
+    return data
+
 
 class ProfileViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
@@ -23,4 +41,9 @@ class ProfileViewSet(viewsets.ViewSet):
         if university is not None:
             user.university = university
         user.save()
+        print(user.logo.read())
         return Response(status=200)
+
+    def info(self, request):
+        user = request.user
+        return Response(user_to_user_data(user), status=200)
