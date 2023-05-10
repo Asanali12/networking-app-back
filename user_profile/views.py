@@ -53,6 +53,7 @@ class ProfileViewSet(viewsets.ViewSet):
         print(request.data)
         user = request.user
         logo = request.FILES.get('logo', None)
+        print(request.FILES)
         fullname = request.data.get('fullname', None)
         age = request.data.get('age', None)
         city = request.data.get('city', None)
