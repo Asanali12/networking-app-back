@@ -50,6 +50,7 @@ class ProfileViewSet(viewsets.ViewSet):
         },
     )
     def edit(self, request):
+        print(request.content_type)
         print(request.data)
         user = request.user
         logo = request.FILES.get('logo', None)
