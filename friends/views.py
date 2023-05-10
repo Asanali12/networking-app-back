@@ -21,14 +21,15 @@ class FriendsViewSet(viewsets.ViewSet):
                                     "age": fields.IntegerField(),
                                     "city": fields.CharField(),
                                     "university": fields.CharField(),
-                                    "logo_url": fields.CharField()}, many=True),
+                                    "logo_url": fields.CharField(),
+                                    "is_friend": fields.IntegerField()}, many=True),
         },
     )
     def list(self, request):
         user = request.user
         data = []
         for friend in user.friends.all():
-            data.append(user_to_user_data(friend))
+            data.append(user_to_user_data(friend, user))
         return Response(data, status=200)
 
     @extend_schema(
@@ -100,7 +101,8 @@ class FriendsViewSet(viewsets.ViewSet):
                                                                "age": fields.IntegerField(),
                                                                "city": fields.CharField(),
                                                                "university": fields.CharField(),
-                                                               "logo_url": fields.CharField()})},
+                                                               "logo_url": fields.CharField(),
+                                                               "is_friend": fields.IntegerField()})},
                                    many=True),
         },
     )
@@ -117,7 +119,7 @@ class FriendsViewSet(viewsets.ViewSet):
 
         data = []
         for rq in friends_requests:
-            data.append({'id': rq.id, 'user': user_to_user_data(rq.user_from)})
+            data.append({'id': rq.id, 'user': user_to_user_data(rq.user_from, user)})
         return Response(data, status=200)
 
     @extend_schema(

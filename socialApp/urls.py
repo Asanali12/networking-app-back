@@ -10,4 +10,5 @@ urlpatterns = [
     path('auth/', include('user.urls')),
     path('profile/', include('user_profile.urls')),
     path('friends/', include('friends.urls')),
+    path('posts/', include('posts.urls')),
 ]

@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'user',
     'user_profile',
     'friends',
+    'posts',
     'socialApp'
 ]
 
