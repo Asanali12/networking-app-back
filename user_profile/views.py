@@ -24,7 +24,7 @@ def user_to_user_data(user: User, self: User = None):
     }
     if self is not None:
         data['is_friend'] = 1 if self.friends.filter(id=user.id).exists() else 0
-    return {k: v for k, v in data.items() if v}
+    return {k: v for k, v in data.items() if v is not None}
 
 
 class ProfileViewSet(viewsets.ViewSet):
