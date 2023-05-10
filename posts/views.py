@@ -49,9 +49,10 @@ class PostViewSet(viewsets.ViewSet):
             raise ValidationError("Post is empty")
 
         post = Posts.objects.create(body=body, author=user)
-        path = f'images/user_{user.id}/post_{post.id}.PNG'
-        post.image_url = upload_image_to_aws_storage(BUCKET_NAME, image.read(), path)
-        post.save()
+        if image is not None:
+            path = f'images/user_{user.id}/post_{post.id}.PNG'
+            post.image_url = upload_image_to_aws_storage(BUCKET_NAME, image.read(), path)
+            post.save()
 
         return Response(post_to_post_data(post, user), status=200)
 
