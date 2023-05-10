@@ -1,6 +1,7 @@
 import base64
 
-from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema, inline_serializer, OpenApiResponse
+from rest_framework import viewsets, fields
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -25,6 +26,24 @@ def user_to_user_data(user: User):
 class ProfileViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=inline_serializer("EditProfileRequest",
+                                  {"fullname": fields.CharField(),
+                                   "age": fields.IntegerField(),
+                                   "city": fields.CharField(),
+                                   "university": fields.CharField(),
+                                   "logo": fields.ImageField()}),
+        responses={
+            200: inline_serializer("ProfileInfo",
+                                   {"id": fields.IntegerField(),
+                                    "email": fields.CharField(),
+                                    "fullname": fields.CharField(),
+                                    "age": fields.IntegerField(),
+                                    "city": fields.CharField(),
+                                    "university": fields.CharField(),
+                                    "logo_url": fields.CharField()}),
+        },
+    )
     def edit(self, request):
         user = request.user
         logo = request.FILES.get('logo', None)
@@ -47,6 +66,18 @@ class ProfileViewSet(viewsets.ViewSet):
         user.save()
         return Response(user_to_user_data(user), status=200)
 
+    @extend_schema(
+        responses={
+            200: inline_serializer("ProfileInfo",
+                                   {"id": fields.IntegerField(),
+                                    "email": fields.CharField(),
+                                    "fullname": fields.CharField(),
+                                    "age": fields.IntegerField(),
+                                    "city": fields.CharField(),
+                                    "university": fields.CharField(),
+                                    "logo_url": fields.CharField()}),
+        },
+    )
     def info(self, request):
         user = request.user
         return Response(user_to_user_data(user), status=200)
