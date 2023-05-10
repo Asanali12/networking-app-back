@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import boto3
 from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -127,6 +128,15 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     "Access-Control-Allow-Methods",
     "Access-Control-Allow-Origin"
 ]
+
+# Setup boto3
+s3_client = boto3.session.Session().client(
+    service_name='s3',
+    aws_access_key_id=os.environ.get('AWS_S3_ACCESS_KEY_ID'),
+    aws_secret_access_key=os.environ.get('AWS_S3_SECRET_ACCESS_KEY'),
+    endpoint_url='https://storage.yandexcloud.net',
+)
+BUCKET_NAME = os.environ.get('AWS_BUCKET_NAME')
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'

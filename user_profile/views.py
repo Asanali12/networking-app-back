@@ -4,7 +4,9 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from socialApp.settings import s3_client, BUCKET_NAME
 from user.models import User
+from user_profile.helpers import upload_image_to_aws_storage
 
 
 def user_to_user_data(user: User):
@@ -31,7 +33,9 @@ class ProfileViewSet(viewsets.ViewSet):
         city = request.data.get('city', None)
         university = request.data.get('university', None)
         if logo is not None:
-            print(logo)
+            extension = logo.name.split('.')[-1]
+            path = f'images/user_{user.id}/logo.{extension}'
+            user.logo_url = upload_image_to_aws_storage(BUCKET_NAME, logo.read(), path)
         if fullname is not None:
             user.fullname = fullname
         if age is not None:
