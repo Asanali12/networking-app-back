@@ -100,7 +100,8 @@ class FriendsViewSet(viewsets.ViewSet):
                                                                "age": fields.IntegerField(),
                                                                "city": fields.CharField(),
                                                                "university": fields.CharField(),
-                                                               "logo_url": fields.CharField()})}),
+                                                               "logo_url": fields.CharField()})},
+                                   many=True),
         },
     )
     def income_request(self, request):
