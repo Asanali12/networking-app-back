@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'user',
     'user_profile',
+    'friends',
     'socialApp'
 ]
 
