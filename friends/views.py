@@ -91,7 +91,16 @@ class FriendsViewSet(viewsets.ViewSet):
             OpenApiParameter("status", str)
         ],
         responses={
-            200: OpenApiResponse(description="Request was send"),
+            200: inline_serializer("IncomeRequests",
+                                   {"id": fields.IntegerField(),
+                                    "user": inline_serializer("RequestUsers",
+                                                              {"id": fields.IntegerField(),
+                                                               "email": fields.CharField(),
+                                                               "fullname": fields.CharField(),
+                                                               "age": fields.IntegerField(),
+                                                               "city": fields.CharField(),
+                                                               "university": fields.CharField(),
+                                                               "logo_url": fields.CharField()})}),
         },
     )
     def income_request(self, request):
@@ -159,4 +168,3 @@ class FriendsViewSet(viewsets.ViewSet):
         friends_requests.save()
 
         return Response("Request declined", status=200)
-
